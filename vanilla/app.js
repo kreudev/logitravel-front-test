@@ -53,6 +53,11 @@ function bindEvents() {
 
     const id = itemButton.dataset.id;
 
+    if (event.detail === 2) {
+      deleteById(id);
+      return;
+    }
+
     if (event.ctrlKey || event.metaKey) {
       toggleSelection(id);
       return;
