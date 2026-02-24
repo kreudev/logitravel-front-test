@@ -61,6 +61,55 @@ body {
   font-size: 1.45rem;
 }
 
+.instructions {
+  margin: 18px auto 0;
+  width: min(100%, 680px);
+  background: #dfe1e6;
+  border: 1px solid #c7cad3;
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+}
+
+.instructionsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  text-align: left;
+}
+
+.instructionsItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #3f434b;
+  font-size: 1.4rem;
+  line-height: 1.4;
+}
+
+.instructionsIcon {
+  width: 22px;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  background: #f3f4f6;
+  border: 1px solid #c8ccd6;
+  font-size: 1.25rem;
+}
+
+.shortcutKey {
+  display: inline-block;
+  font-weight: 600;
+  color: #2f3340;
+  background: #eef1f8;
+  border: 1px solid #cbd2e2;
+  border-radius: 6px;
+  padding: 1px 7px;
+}
+
 .listPanel {
   border: 2px solid var(--surface-border);
   min-height: 240px;
