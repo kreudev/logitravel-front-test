@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Technical Proof - Vanilla</title>
+    <link rel="stylesheet" href="./styles.module.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="card" aria-labelledby="app-title">
+        <header class="cardHeader">
+          <h1 id="app-title" class="title">This is a technical proof</h1>
+          <p class="subtitle">
+            Lorem ipsum dolor sit amet consectetur adipiscing, elit mus primis nec inceptos. Lacinia habitasse arcu molestie maecenas cursus quam nunc,
+            hendrerit posuere augue fames dictumst placerat porttitor, dis mi pharetra vestibulum venenatis phasellus.
+          </p>
+        </header>
+
+        <section class="listPanel" aria-label="Text items">
+          <ul id="items-list" class="itemsList"></ul>
+        </section>
+
+        <footer class="actions">
+          <div class="actionsLeft">
+            <button id="undo-btn" type="button" class="btn btnOutline btnIcon" aria-label="Undo last action">↺</button>
+            <button id="delete-btn" type="button" class="btn btnOutline">Delete</button>
+          </div>
+          <button id="open-add-modal-btn" type="button" class="btn btnPrimary">Add</button>
+        </footer>
+      </section>
+
+      <section id="modal-root" class="modalRoot hidden" aria-hidden="true">
+        <div id="modal-backdrop" class="modalBackdrop"></div>
+        <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+          <h2 id="modal-title" class="modalTitle">Add item to list</h2>
+          <form id="add-form" class="modalForm">
+            <input id="item-input" class="input" type="text" placeholder="Type the text here..." autocomplete="off" maxlength="120" />
+            <div class="modalActions">
+              <button id="submit-add-btn" type="submit" class="btn btnPrimary">Add</button>
+              <button id="cancel-add-btn" type="button" class="btn btnOutline">Cancel</button>
+            </div>
+          </form>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
