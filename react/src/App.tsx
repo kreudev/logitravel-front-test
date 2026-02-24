@@ -2,15 +2,8 @@ import { RotateCcw } from 'lucide-react'
 import { useMemo } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 
+import { AddItemDialog } from '@/components/add-item-dialog'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { AnimatedList } from '@/components/ui/animated-list'
 import { Kbd } from '@/components/ui/kbd'
@@ -168,49 +161,14 @@ function App() {
         </Card>
       </div>
 
-      <Dialog open={isAddDialogOpen} onOpenChange={setAddDialogOpen}>
-        <DialogContent showCloseButton={false} className="max-w-2xl rounded-2xl border border-[#d4d5da] bg-[#ececec] p-8">
-          <DialogHeader className="space-y-3 text-left">
-            <DialogTitle className="text-3xl font-normal text-[#383c43]">Add item to list</DialogTitle>
-            <DialogDescription className="hidden">Type a new item and add it to the list.</DialogDescription>
-          </DialogHeader>
-
-          <form
-            onSubmit={(event) => {
-              event.preventDefault()
-              addItem()
-            }}
-            className="grid gap-5"
-          >
-            <input
-              value={draftText}
-              onChange={(event) => setDraftText(event.currentTarget.value)}
-              placeholder="Type the text here..."
-              autoFocus
-              maxLength={120}
-              className="h-15 w-full border-2 border-[#d0d0d2] bg-white/20 px-4 text-lg text-[#2f3239] outline-none transition-colors placeholder:text-[#a4a7af] focus:border-[#7080ff]"
-            />
-
-            <DialogFooter className="flex-row justify-end gap-3 sm:flex-row">
-              <Button
-                type="submit"
-                disabled={!canSubmit}
-                className="h-11 min-w-30 rounded-full bg-[#3549f5] px-8 text-base uppercase tracking-wide text-white hover:bg-[#4a5dff]"
-              >
-                Add
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setAddDialogOpen(false)}
-                className="h-11 rounded-full border-[#5f72ff] bg-transparent px-8 text-base uppercase tracking-wide text-[#475af8] hover:bg-[#e5e9ff]"
-              >
-                Cancel
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <AddItemDialog
+        open={isAddDialogOpen}
+        onOpenChange={setAddDialogOpen}
+        value={draftText}
+        onValueChange={setDraftText}
+        onSubmit={addItem}
+        canSubmit={canSubmit}
+      />
     </main>
   )
 }
