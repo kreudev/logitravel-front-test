@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { AnimatedList } from '@/components/ui/animated-list'
 import { Kbd } from '@/components/ui/kbd'
 import { useListKeyboardShortcuts } from '@/hooks/use-list-keyboard-shortcuts'
 import { useListStore } from '@/store/use-list-store'
@@ -96,39 +97,39 @@ function App() {
 
           <CardContent className="px-6 md:px-11">
             <section className="h-[255px] overflow-auto border-2 border-[#d0d0d2] bg-white/10 p-2" aria-label="Items list">
-              <ul className="space-y-1">
-                {items.length === 0 ? (
-                  <li className="px-2 py-1 text-base text-[#81858e] md:text-lg">No items yet. Add one to start.</li>
-                ) : (
-                  items.map((item) => {
+              {items.length === 0 ? (
+                <p className="px-2 py-1 text-base text-[#81858e] md:text-lg">No items yet. Add one to start.</p>
+              ) : (
+                <AnimatedList className="gap-0.5" role="list" aria-label="Item list">
+                  {items.map((item) => {
                     const isSelected = selectedIdSet.has(item.id)
 
                     return (
-                      <li key={item.id}>
-                        <button
-                          type="button"
-                          onClick={(event) => {
-                            if (event.detail === 2) {
-                              deleteItemById(item.id)
-                              return
-                            }
+                      <button
+                        key={item.id}
+                        type="button"
+                        role="listitem"
+                        onClick={(event) => {
+                          if (event.detail === 2) {
+                            deleteItemById(item.id)
+                            return
+                          }
 
-                            const multiSelect = event.metaKey || event.ctrlKey
-                            selectItem(item.id, multiSelect)
-                          }}
-                          onDoubleClick={() => deleteItemById(item.id)}
-                          className={[
-                            'w-full cursor-pointer px-3 py-1 text-left text-2xl text-[#50545b] transition-colors md:text-[2rem]',
-                            isSelected ? 'bg-[#3549f5] text-white' : 'hover:bg-[#dbe2ff]',
-                          ].join(' ')}
-                        >
-                          {item.text}
-                        </button>
-                      </li>
+                          const multiSelect = event.metaKey || event.ctrlKey
+                          selectItem(item.id, multiSelect)
+                        }}
+                        onDoubleClick={() => deleteItemById(item.id)}
+                        className={[
+                          'w-full cursor-pointer px-3 py-1 text-left text-2xl text-[#50545b] transition-colors md:text-[2rem]',
+                          isSelected ? 'bg-[#3549f5] text-white' : 'hover:bg-[#dbe2ff]',
+                        ].join(' ')}
+                      >
+                        {item.text}
+                      </button>
                     )
-                  })
-                )}
-              </ul>
+                  })}
+                </AnimatedList>
+              )}
             </section>
           </CardContent>
 
