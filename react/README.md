@@ -1,73 +1,91 @@
-# React + TypeScript + Vite
+# React Implementation
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Why This Architecture
 
-Currently, two official plugins are available:
+The project is structured to keep business logic isolated from UI concerns and make behavior easy to test.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. `store/` holds state transitions and app rules.
+2. `hooks/` encapsulate cross-cutting UI behavior (keyboard shortcuts).
+3. `components/` focuses on presentation and interaction.
+4. `components/ui/` contains reusable internal UI primitives (shadcn-based).
+5. `__tests__/` validates user-facing behavior end to end.
 
-## React Compiler
+This can look over-engineered for a small exercise, but it demonstrates how the same app scales with low coupling.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Use Cases and Technical Mapping
 
-## Expanding the ESLint configuration
+| Use case | Main modules involved | How it works |
+| --- | --- | --- |
+| Add item | `store/use-list-store.ts`, `components/add-item-dialog.tsx` | Input text is validated (`trim`), item is added, dialog closes, history updates for undo |
+| Select item | `components/list-item.tsx`, `store/use-list-store.ts` | Click selects one item; repeated click toggles off |
+| Multi-select | `components/list-item.tsx`, `store/use-list-store.ts` | `Cmd/Ctrl + click` toggles ids inside `selectedIds` |
+| Delete selected | `components/list-card.tsx`, `store/use-list-store.ts` | Delete button removes selected ids and clears selection |
+| Double-click delete | `components/list-item.tsx`, `store/use-list-store.ts` | Item can be removed directly without using selection |
+| Undo last action | `store/use-list-store.ts`, `components/list-card.tsx` | Store keeps a bounded history stack and restores last snapshot |
+| Keyboard shortcuts | `hooks/use-list-keyboard-shortcuts.ts` | Global listeners trigger delete/undo when valid |
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Folder Structure
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+react/
+  src/
+    components/
+      add-item-dialog.tsx
+      list-card.tsx
+      list-item.tsx
+      ui/
+        animated-list.tsx
+        button.tsx
+        card.tsx
+        dialog.tsx
+        input.tsx
+        kbd.tsx
+    hooks/
+      use-list-keyboard-shortcuts.ts
+    store/
+      use-list-store.ts
+    __tests__/
+      app.test.tsx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## State Model (Zustand)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Store file: `src/store/use-list-store.ts`
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Core state fields:
+
+1. `items`: list data.
+2. `selectedIds`: selected item ids.
+3. `history`: snapshots used by undo.
+4. `isAddDialogOpen`: modal visibility.
+5. `draftText`: controlled input value.
+
+Core actions:
+
+1. `addItem`
+2. `selectItem`
+3. `deleteSelectedItems`
+4. `deleteItemById`
+5. `undoLastChange`
+
+## Testing Strategy
+
+Tests are written with Vitest + Testing Library and cover the core user journeys:
+
+1. Initial render.
+2. Add item.
+3. Delete selected item.
+4. Multi-select delete.
+5. Double-click delete.
+6. Undo.
+
+The goal is to validate behavior from the user perspective rather than implementation details.
+
+## Scripts
+
+```bash
+npm run dev
+npm run build
+npm run test
+npm run test:watch
 ```
