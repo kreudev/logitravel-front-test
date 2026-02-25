@@ -1,15 +1,29 @@
 # Logitravel Front-End Test
 
-This repository contains two implementations of the same list-management challenge:
+This repository contains two implementations of the same list-management challenge.
+
+The goal is not only to deliver features, but also to show technical adaptability across different frontend workflows without depending on a single stack or coding style.
+
+This project intentionally combines two approaches:
+
+1. `vanilla` uses a CSS Modules-style architecture plus `localStorage` state persistence.
+2. `react` uses Tailwind CSS v4 for UI styling and Zustand for centralized state management.
+
+By solving the same product requirements in both environments, the repository demonstrates that the development process can be adapted to different team conventions, project constraints, and maturity levels while keeping feature parity and code quality.
+
+This is the key idea behind the technical decision: the format can change, but the engineering criteria remain consistent (clear structure, predictable state, reusable UI, and testable behavior).
+
+Implementations:
 
 1. `vanilla`: plain HTML + JavaScript + CSS Modules.
-2. `react`: React + TypeScript + Zustand + Tailwind v4 + shadcn/ui.
+2. `react`: React + TypeScript + Zustand + Tailwind v4 + shadcn/ui. ( Vite )
 
 ## Repository Structure
 
 1. `vanilla/`: standalone vanilla implementation.
 2. `react/`: Vite + React implementation.
 3. `README.md`: global project documentation.
+4. `react/README.md`: architecture and use-case mapping for the React solution.
 
 ## Vanilla Project
 
@@ -68,6 +82,18 @@ Location: `react/`
    - `src/components/list-item.tsx`
    - `src/components/add-item-dialog.tsx`
    - `src/components/ui/*` (internal shadcn/ui components)
+
+### Use Cases vs Architecture
+
+The React solution intentionally maps each user use case to a small, explicit set of modules:
+
+1. Input and add flow -> dialog component + store action.
+2. Selection and multi-selection -> item component events + store selection state.
+3. Delete operations -> card actions and item-level direct delete + store reducers.
+4. Undo and keyboard shortcuts -> store history + dedicated keyboard hook.
+5. Rendering and UX consistency -> composed reusable UI primitives.
+
+This relation is documented in detail in `react/README.md` to make design decisions easy to explain during review.
 
 ### Features
 
